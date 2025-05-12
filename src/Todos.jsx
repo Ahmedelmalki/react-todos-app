@@ -1,11 +1,17 @@
  import { useState } from "react";
-
-// todo : set also the routes
+ import { useLocation } from "react-router-dom";
+ import Footer from "./footer";
 
 function App() {
     const [todos, setTodos] = useState([]);
     const [input, setInput] = useState("");
-    const [filter, setFilter] = useState("all");
+
+    const location = useLocation();
+
+    const currentPath = location.pathname;
+    let filter = "all";
+    if (currentPath === "/active") filter = "active";
+    else if (currentPath === "/completed") filter = "completed";
 
     const addTodo = () => {
         if (!input.trim()) return;
@@ -57,13 +63,7 @@ function App() {
           ))}
         </ul>
       </section>
-      <footer>
-        <span>{itemsLeft} items left</span>
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("completed")}>Completed</button>
-        <button onClick={clearCompleted}>Clear Completed</button>
-      </footer>
+    <Footer itemsLeft={itemsLeft} clearCompleted={clearCompleted}/>
     </>
   );
 }
